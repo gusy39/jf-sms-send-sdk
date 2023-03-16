@@ -1,8 +1,12 @@
-#  发送示例
+package cn.com.infocloud;
 
-## 示例一：固定短信模板
+import cn.com.infocloud.client.DomainEnum;
+import cn.com.infocloud.vo.ApiResponse;
+import com.alibaba.fastjson.JSON;
+import org.junit.Test;
+import java.util.*;
 
-```java
+public class SendSmsApiTest1 {
     /**
      * 没有变量的模板发送，即模板内容固定
      * 如模板号：7671218232469217792
@@ -30,9 +34,7 @@
             exception.printStackTrace();
         }
     }
-```
-## 示例二：带变量的模板
-```java
+
     /**
      * 普通带变量的模板发送，模板内容有变量
      * 如模板号：7671218232469217791
@@ -66,9 +68,7 @@
             exception.printStackTrace();
         }
     }
-```
-## 示例三：每个号码发送内容不一样
-```java
+
     /**
      * 普通带变量的模板发送，模板内容有变量，每个手机号收到的内容不一样
      * 如模板号：7671218232469217791
@@ -88,7 +88,6 @@
         String templateCode = "833337635977097216";
         //多个手机号，收到的内容不一致
         try {
-
             Map<String, LinkedList<String>> phonesAndParams = new HashMap<>();
             // 18116545110收到 【企业签名】你本次收入300.09元。
             String phone1 = "18116545110";
@@ -109,4 +108,4 @@
             exception.printStackTrace();
         }
     }
-  ```
+}
