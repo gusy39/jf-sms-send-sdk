@@ -6,12 +6,12 @@ import java.io.Serializable;
 /**
  * @author gusy
  */
-public class ApiResponse implements Serializable {
+public class SmsSendResponse<T> implements Serializable {
     public static Integer SUCCESS = 200;
 
     private Integer code;
     private String message;
-    private MessageSendResVo data;
+    private T data;
     private String requestId;
 
     public Integer getCode() {
@@ -30,11 +30,11 @@ public class ApiResponse implements Serializable {
         this.message = message;
     }
 
-    public MessageSendResVo getData() {
+    public T getData() {
         return data;
     }
 
-    public void setData(MessageSendResVo data) {
+    public void setData(T data) {
         this.data = data;
     }
 
@@ -46,8 +46,8 @@ public class ApiResponse implements Serializable {
         this.requestId = requestId;
     }
 
-    public static ApiResponse error(Integer code, String remark) {
-        ApiResponse response = new ApiResponse();
+    public static SmsSendResponse error(Integer code, String remark) {
+        SmsSendResponse response = new SmsSendResponse();
         response.setCode(code);
         response.setMessage(remark);
         return response;

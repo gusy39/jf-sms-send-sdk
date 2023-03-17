@@ -1,9 +1,9 @@
 package cn.com.infocloud;
 
 import cn.com.infocloud.client.DomainEnum;
-import cn.com.infocloud.vo.ApiResponse;
+import cn.com.infocloud.vo.SmsSendResponse;
+import cn.com.infocloud.tool.SmsSendTool;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -27,10 +27,10 @@ public final class SendSmsApi {
      * @param phones 手机号。手机号最大个数限制1000
      * @return
      */
-    public ApiResponse send(String templateCode, Set<String> phones) throws Exception {
+    public SmsSendResponse send(String templateCode, Set<String> phones) throws Exception {
         return smsSendTool.send(templateCode,phones,null);
     }
-    public ApiResponse send(String templateCode, Set<String> phones, String upExtendCode) throws Exception {
+    public SmsSendResponse send(String templateCode, Set<String> phones, String upExtendCode) throws Exception {
         return smsSendTool.send(templateCode,phones,upExtendCode);
     }
 
@@ -41,11 +41,11 @@ public final class SendSmsApi {
      * @param phones 手机号。手机号最大个数限制1000
      * @return
      */
-    public ApiResponse sendHasVar(String  templateCode, LinkedList<String> params, Set<String> phones) throws Exception {
+    public SmsSendResponse sendHasVar(String  templateCode, LinkedList<String> params, Set<String> phones) throws Exception {
         //手机号先去重，然后再转换
         return smsSendTool.send(templateCode,params,phones,null);
     }
-    public ApiResponse sendHasVar(String  templateCode, LinkedList<String> params, Set<String> phones, String upExtendCode) throws Exception {
+    public SmsSendResponse sendHasVar(String  templateCode, LinkedList<String> params, Set<String> phones, String upExtendCode) throws Exception {
         //手机号先去重，然后再转换
         return smsSendTool.send(templateCode,params,phones,upExtendCode);
     }
@@ -56,10 +56,10 @@ public final class SendSmsApi {
      * @param phonesAndParams 手机号-手机号对应的模板参数。手机号最大个数限制500
      * @return
      */
-    public ApiResponse sendPhoneToContent(String templateCode, Map<String,LinkedList<String>> phonesAndParams) throws Exception {
+    public SmsSendResponse sendPhoneToContent(String templateCode, Map<String,LinkedList<String>> phonesAndParams) throws Exception {
         return smsSendTool.sendBatch(templateCode,phonesAndParams,null);
     }
-    public ApiResponse sendPhoneToContent(String templateCode, Map<String,LinkedList<String>> phonesAndParams, String upExtendCode) throws Exception {
+    public SmsSendResponse sendPhoneToContent(String templateCode, Map<String,LinkedList<String>> phonesAndParams, String upExtendCode) throws Exception {
         return smsSendTool.sendBatch(templateCode,phonesAndParams,upExtendCode);
     }
 }

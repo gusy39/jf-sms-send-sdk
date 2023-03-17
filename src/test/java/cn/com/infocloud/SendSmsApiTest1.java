@@ -1,7 +1,7 @@
 package cn.com.infocloud;
 
 import cn.com.infocloud.client.DomainEnum;
-import cn.com.infocloud.vo.ApiResponse;
+import cn.com.infocloud.vo.SmsSendResponse;
 import com.alibaba.fastjson.JSON;
 import org.junit.Test;
 import java.util.*;
@@ -26,7 +26,7 @@ public class SendSmsApiTest1 {
         phoneSet.add("18116545110");
         phoneSet.add("18216545111");
         try {
-            ApiResponse send = sendSmsApi.send(templateCode, phoneSet);
+            SmsSendResponse send = sendSmsApi.send(templateCode, phoneSet);
             //如果有扩展号需求，替换为以下方法，末尾输入你自己的扩展号,扩展号为数字
 //            ApiResponse send = sendSmsApi.send(templateCode, phoneSet,"40");
             System.out.println(JSON.toJSONString(send));
@@ -60,7 +60,7 @@ public class SendSmsApiTest1 {
         phoneSet.add("18116545110");
         phoneSet.add("18216545111");
         try {
-            ApiResponse send = sendSmsApi.sendHasVar(templateCode, paramList, phoneSet);
+            SmsSendResponse send = sendSmsApi.sendHasVar(templateCode, paramList, phoneSet);
             //如果有扩展号需求，替换为以下方法，末尾输入你自己的扩展号,扩展号为数字
             //ApiResponse send = sendSmsApi.sendHasVar(templateCode, paramList, phoneSet, "xx");
             System.out.println(JSON.toJSONString(send));
@@ -100,7 +100,7 @@ public class SendSmsApiTest1 {
             paramList2.add("222");
             phonesAndParams.put(phone2, paramList2);
 
-            ApiResponse send = sendSmsApi.sendPhoneToContent(templateCode, phonesAndParams);
+            SmsSendResponse send = sendSmsApi.sendPhoneToContent(templateCode, phonesAndParams);
             //如果有扩展号需求，替换为以下方法，末尾输入你自己的扩展号,扩展号为数字
             //ApiResponse send = sendSmsApi.sendPhoneToContent(templateCode, phonesAndParams,"xx");
             System.out.println(JSON.toJSONString(send));

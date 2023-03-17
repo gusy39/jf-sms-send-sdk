@@ -1,8 +1,6 @@
 package cn.com.infocloud.client;
 
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import java.security.InvalidKeyException;
@@ -10,7 +8,6 @@ import java.security.NoSuchAlgorithmException;
 
 public class HmacUtils {
 
-    protected static final Logger LOGGER = LoggerFactory.getLogger(HmacUtils.class);
     /**
      * HmacSHA256算法,返回的结果始终是32位
      * @param key 加密的键，可以是任何数据
@@ -24,9 +21,9 @@ public class HmacUtils {
             hmacSha256 = Mac.getInstance(hmacAlgorithms.toString());
             hmacSha256.init(new SecretKeySpec(key, 0, key.length, hmacAlgorithms.toString()));
         } catch (NoSuchAlgorithmException e) {
-            LOGGER.error(e.getMessage());
+            e.printStackTrace();
         } catch (InvalidKeyException e) {
-            LOGGER.error(e.getMessage());
+            e.printStackTrace();
         }
 
         byte[] hmacSha256Bytes = hmacSha256.doFinal(content);
@@ -65,9 +62,9 @@ public class HmacUtils {
             SecretKeySpec secret_key = new SecretKeySpec(secret.getBytes(), hmacAlgorithms.toString());
             hmacSha256.init(secret_key);
         } catch (NoSuchAlgorithmException e) {
-            LOGGER.error(e.getMessage());
+            e.printStackTrace();
         } catch (InvalidKeyException e) {
-            LOGGER.error(e.getMessage());
+            e.printStackTrace();
         }
 
         byte[] bytes = hmacSha256.doFinal(message.getBytes());

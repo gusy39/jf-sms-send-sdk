@@ -1,12 +1,15 @@
-package cn.com.infocloud;
+package cn.com.infocloud.tool;
 
 
 import cn.com.infocloud.client.AccessKeyUtils;
 import cn.com.infocloud.client.SmsSendClient;
 import cn.com.infocloud.client.SmsStringUtils;
-import cn.com.infocloud.vo.ApiRequest;
-import cn.com.infocloud.vo.ApiResponse;
+import cn.com.infocloud.request.ApiRequest;
+import cn.com.infocloud.request.ApiResponse;
+import cn.com.infocloud.vo.MessageSendResVo;
+import cn.com.infocloud.vo.SmsSendResponse;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.TypeReference;
 
 import java.io.IOException;
 import java.util.*;
@@ -33,7 +36,7 @@ public class SmsSendTool {
      * @param phones       手机号。手机号最大个数限制1000
      * @return
      */
-    public ApiResponse send(String templateCode, Set<String> phones, String upExtendCode) throws Exception {
+    public SmsSendResponse send(String templateCode, Set<String> phones, String upExtendCode) throws Exception {
         return sendSingleton(templateCode, null, phones, upExtendCode);
     }
 
@@ -45,7 +48,7 @@ public class SmsSendTool {
      * @param phones       手机号。手机号最大个数限制1000
      * @return
      */
-    public ApiResponse send(String templateCode, LinkedList<String> params, Set<String> phones, String upExtendCode) throws Exception {
+    public SmsSendResponse send(String templateCode, LinkedList<String> params, Set<String> phones, String upExtendCode) throws Exception {
         return sendSingleton(templateCode, params, phones, upExtendCode);
     }
 
@@ -59,7 +62,7 @@ public class SmsSendTool {
      * @return HttpResponse
      * @throws IOException
      */
-    private ApiResponse sendSingleton(String templateCode, LinkedList<String> params, Set<String> phoneSet, String upExtendCode) throws Exception {
+    private SmsSendResponse sendSingleton(String templateCode, LinkedList<String> params, Set<String> phoneSet, String upExtendCode) throws Exception {
         if (SmsStringUtils.isBlank(templateCode)) {
             throw new NullPointerException("模板id不能为空");
         }
@@ -98,7 +101,14 @@ public class SmsSendTool {
         request.setHeaders(headers);
         String url = domain + MESSAGE_SEND;
         request.setUrl(url);
-        return SmsSendClient.post(request);
+        ApiResponse post = SmsSendClient.post(request);
+        int status = post.getStatus();
+        if (status != 200){
+            return SmsSendResponse.error(status,"网络请求异常，域名或者请求地址不正确");
+        }
+        String body = new String(post.getBody());
+        SmsSendResponse smsResponse = JSON.parseObject(body, new TypeReference<SmsSendResponse<MessageSendResVo>>(){});
+        return smsResponse;
     }
 
     /**
@@ -109,7 +119,7 @@ public class SmsSendTool {
      * @return HttpResponse
      * @throws IOException
      */
-    public ApiResponse sendBatch(String templateCode, Map<String, LinkedList<String>> phonesAndParams, String upExtendCode) throws Exception {
+    public SmsSendResponse sendBatch(String templateCode, Map<String, LinkedList<String>> phonesAndParams, String upExtendCode) throws Exception {
         if (SmsStringUtils.isBlank(templateCode)) {
             throw new NullPointerException("模板id不能为空");
         }
@@ -130,6 +140,13 @@ public class SmsSendTool {
         request.setHeaders(headers);
         String url = domain + MESSAGE_SEND_BATCH;
         request.setUrl(url);
-        return SmsSendClient.post(request);
+        ApiResponse post = SmsSendClient.post(request);
+        int status = post.getStatus();
+        if (status != 200){
+            return SmsSendResponse.error(status,"网络请求异常，域名或者请求地址不正确");
+        }
+        String body = new String(post.getBody());
+        SmsSendResponse smsResponse = JSON.parseObject(body, new TypeReference<SmsSendResponse<MessageSendResVo>>(){});
+        return smsResponse;
     }
 }
