@@ -1,4 +1,4 @@
-package cn.com.infocloud.client;
+package cn.infocloud.cc.client;
 
 
 import javax.crypto.Mac;

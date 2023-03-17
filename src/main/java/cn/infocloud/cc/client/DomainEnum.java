@@ -1,4 +1,4 @@
-package cn.com.infocloud.client;
+package cn.infocloud.cc.client;
 
 public enum DomainEnum {
     DEFAULT("https://opassapi.infocloud.cc/"),

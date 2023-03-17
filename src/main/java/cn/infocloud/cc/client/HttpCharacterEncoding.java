@@ -1,4 +1,4 @@
-package cn.com.infocloud.client;
+package cn.infocloud.cc.client;
 
 public class HttpCharacterEncoding {
     public static final String DEFAULT_ENCODING = "UTF8";

@@ -1,7 +1,7 @@
-package cn.com.infocloud;
+package cn.infocloud.cc;
 
-import cn.com.infocloud.client.DomainEnum;
-import cn.com.infocloud.vo.SmsSendResponse;
+import cn.infocloud.cc.client.DomainEnum;
+import cn.infocloud.cc.vo.SmsSendResponse;
 import com.alibaba.fastjson.JSON;
 import org.junit.Test;
 import java.util.*;

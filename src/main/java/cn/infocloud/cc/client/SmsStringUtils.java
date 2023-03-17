@@ -1,4 +1,4 @@
-package cn.com.infocloud.client;
+package cn.infocloud.cc.client;
 
 import java.util.regex.Pattern;
 

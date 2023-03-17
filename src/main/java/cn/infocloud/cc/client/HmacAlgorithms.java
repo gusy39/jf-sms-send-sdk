@@ -1,4 +1,4 @@
-package cn.com.infocloud.client;
+package cn.infocloud.cc.client;
 
 public enum HmacAlgorithms {
     HMAC_MD5("HmacMD5"),

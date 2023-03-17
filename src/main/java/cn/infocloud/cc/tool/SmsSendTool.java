@@ -1,13 +1,13 @@
-package cn.com.infocloud.tool;
+package cn.infocloud.cc.tool;
 
 
-import cn.com.infocloud.client.AccessKeyUtils;
-import cn.com.infocloud.client.SmsSendClient;
-import cn.com.infocloud.client.SmsStringUtils;
-import cn.com.infocloud.request.ApiRequest;
-import cn.com.infocloud.request.ApiResponse;
-import cn.com.infocloud.vo.MessageSendResVo;
-import cn.com.infocloud.vo.SmsSendResponse;
+import cn.infocloud.cc.client.AccessKeyUtils;
+import cn.infocloud.cc.client.SmsSendClient;
+import cn.infocloud.cc.client.SmsStringUtils;
+import cn.infocloud.cc.request.ApiRequest;
+import cn.infocloud.cc.request.ApiResponse;
+import cn.infocloud.cc.vo.MessageSendResVo;
+import cn.infocloud.cc.vo.SmsSendResponse;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
 

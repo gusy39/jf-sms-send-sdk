@@ -1,4 +1,4 @@
-package cn.com.infocloud.request;
+package cn.infocloud.cc.request;
 
 import java.io.Serializable;
 import java.util.HashMap;

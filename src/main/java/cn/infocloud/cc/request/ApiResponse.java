@@ -1,4 +1,4 @@
-package cn.com.infocloud.request;
+package cn.infocloud.cc.request;
 
 import java.util.List;
 import java.util.Map;

@@ -1,7 +1,7 @@
-package cn.com.infocloud.client;
+package cn.infocloud.cc.client;
 
-import cn.com.infocloud.request.ApiRequest;
-import cn.com.infocloud.request.ApiResponse;
+import cn.infocloud.cc.request.ApiRequest;
+import cn.infocloud.cc.request.ApiResponse;
 import com.alibaba.fastjson.JSON;
 
 import java.io.*;

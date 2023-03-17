@@ -1,4 +1,4 @@
-package cn.com.infocloud;
+package cn.infocloud.cc;
 
 public final class ArriveInfoApi {
 

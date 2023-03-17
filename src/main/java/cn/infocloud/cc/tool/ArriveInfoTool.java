@@ -1,4 +1,4 @@
-package cn.com.infocloud.tool;
+package cn.infocloud.cc.tool;
 
 
 import com.alibaba.fastjson.JSON;

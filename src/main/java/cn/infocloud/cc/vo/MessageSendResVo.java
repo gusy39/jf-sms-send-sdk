@@ -1,4 +1,4 @@
-package cn.com.infocloud.vo;
+package cn.infocloud.cc.vo;
 
 import java.io.Serializable;
 
