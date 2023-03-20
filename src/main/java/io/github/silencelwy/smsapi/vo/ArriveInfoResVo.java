@@ -1,4 +1,4 @@
-package cn.infocloud.cc.vo;
+package io.github.silencelwy.smsapi.vo;
 
 import java.io.Serializable;
 

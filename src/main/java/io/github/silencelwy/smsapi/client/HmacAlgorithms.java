@@ -1,4 +1,4 @@
-package cn.infocloud.cc.client;
+package io.github.silencelwy.smsapi.client;
 
 public enum HmacAlgorithms {
     HMAC_MD5("HmacMD5"),

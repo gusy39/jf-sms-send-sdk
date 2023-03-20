@@ -1,7 +1,7 @@
-package cn.infocloud.cc.client;
+package io.github.silencelwy.smsapi.client;
 
-import cn.infocloud.cc.request.ApiRequest;
-import cn.infocloud.cc.request.ApiResponse;
+import io.github.silencelwy.smsapi.request.ApiRequest;
+import io.github.silencelwy.smsapi.request.ApiResponse;
 import com.alibaba.fastjson.JSON;
 
 import java.io.*;

@@ -1,4 +1,4 @@
-package cn.infocloud.cc.tool;
+package io.github.silencelwy.smsapi.tool;
 
 
 import com.alibaba.fastjson.JSON;

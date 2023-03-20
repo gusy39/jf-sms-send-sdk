@@ -1,13 +1,13 @@
-package cn.infocloud.cc.tool;
+package io.github.silencelwy.smsapi.tool;
 
 
-import cn.infocloud.cc.client.AccessKeyUtils;
-import cn.infocloud.cc.client.SmsSendClient;
-import cn.infocloud.cc.client.SmsStringUtils;
-import cn.infocloud.cc.request.ApiRequest;
-import cn.infocloud.cc.request.ApiResponse;
-import cn.infocloud.cc.vo.MessageSendResVo;
-import cn.infocloud.cc.vo.SmsSendResponse;
+import io.github.silencelwy.smsapi.client.AccessKeyUtils;
+import io.github.silencelwy.smsapi.client.SmsSendClient;
+import io.github.silencelwy.smsapi.client.SmsStringUtils;
+import io.github.silencelwy.smsapi.request.ApiRequest;
+import io.github.silencelwy.smsapi.request.ApiResponse;
+import io.github.silencelwy.smsapi.vo.MessageSendResVo;
+import io.github.silencelwy.smsapi.vo.SmsSendResponse;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
 

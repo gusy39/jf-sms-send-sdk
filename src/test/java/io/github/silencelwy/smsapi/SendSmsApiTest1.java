@@ -1,7 +1,7 @@
-package cn.infocloud.cc;
+package io.github.silencelwy.smsapi;
 
-import cn.infocloud.cc.client.DomainEnum;
-import cn.infocloud.cc.vo.SmsSendResponse;
+import io.github.silencelwy.smsapi.client.DomainEnum;
+import io.github.silencelwy.smsapi.vo.SmsSendResponse;
 import com.alibaba.fastjson.JSON;
 import org.junit.Test;
 import java.util.*;

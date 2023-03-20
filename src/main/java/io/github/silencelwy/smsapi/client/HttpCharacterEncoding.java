@@ -1,4 +1,4 @@
-package cn.infocloud.cc.client;
+package io.github.silencelwy.smsapi.client;
 
 public class HttpCharacterEncoding {
     public static final String DEFAULT_ENCODING = "UTF8";

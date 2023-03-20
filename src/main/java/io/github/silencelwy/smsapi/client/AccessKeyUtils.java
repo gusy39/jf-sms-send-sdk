@@ -1,4 +1,4 @@
-package cn.infocloud.cc.client;
+package io.github.silencelwy.smsapi.client;
 
 import java.util.*;
 

@@ -1,8 +1,8 @@
-package cn.infocloud.cc;
+package io.github.silencelwy.smsapi;
 
-import cn.infocloud.cc.client.DomainEnum;
-import cn.infocloud.cc.vo.SmsSendResponse;
-import cn.infocloud.cc.tool.SmsSendTool;
+import io.github.silencelwy.smsapi.client.DomainEnum;
+import io.github.silencelwy.smsapi.tool.SmsSendTool;
+import io.github.silencelwy.smsapi.vo.SmsSendResponse;
 
 import java.util.LinkedList;
 import java.util.Map;

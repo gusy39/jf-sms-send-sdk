@@ -1,4 +1,4 @@
-package cn.infocloud.cc.request;
+package io.github.silencelwy.smsapi.request;
 
 import java.io.Serializable;
 import java.util.HashMap;

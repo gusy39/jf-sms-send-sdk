@@ -1,4 +1,4 @@
-package cn.infocloud.cc.client;
+package io.github.silencelwy.smsapi.client;
 
 public enum DomainEnum {
     DEFAULT("https://opassapi.infocloud.cc/"),
