@@ -3,10 +3,7 @@ package io.github.silencelwy.smsapi.vo;
 import java.io.Serializable;
 
 
-/**
- * @author gusy
- */
-public class SmsSendResponse<T> implements Serializable {
+public class SmsResponse<T> implements Serializable {
     public static Integer SUCCESS = 200;
 
     private Integer code;
@@ -46,8 +43,8 @@ public class SmsSendResponse<T> implements Serializable {
         this.requestId = requestId;
     }
 
-    public static SmsSendResponse error(Integer code, String remark) {
-        SmsSendResponse response = new SmsSendResponse();
+    public static SmsResponse error(Integer code, String remark) {
+        SmsResponse response = new SmsResponse();
         response.setCode(code);
         response.setMessage(remark);
         return response;

@@ -2,7 +2,8 @@ package io.github.silencelwy.smsapi;
 
 import io.github.silencelwy.smsapi.client.DomainEnum;
 import io.github.silencelwy.smsapi.tool.SmsSendTool;
-import io.github.silencelwy.smsapi.vo.SmsSendResponse;
+import io.github.silencelwy.smsapi.vo.MessageSendResVo;
+import io.github.silencelwy.smsapi.vo.SmsResponse;
 
 import java.util.LinkedList;
 import java.util.Map;
@@ -28,10 +29,10 @@ public final class SendSmsApi {
      * @param phones 手机号。手机号最大个数限制1000
      * @return
      */
-    public SmsSendResponse send(String templateCode, Set<String> phones) throws Exception {
+    public SmsResponse<MessageSendResVo> send(String templateCode, Set<String> phones) throws Exception {
         return smsSendTool.send(templateCode,phones,null);
     }
-    public SmsSendResponse send(String templateCode, Set<String> phones, String upExtendCode) throws Exception {
+    public SmsResponse<MessageSendResVo> send(String templateCode, Set<String> phones, String upExtendCode) throws Exception {
         return smsSendTool.send(templateCode,phones,upExtendCode);
     }
 
@@ -42,11 +43,11 @@ public final class SendSmsApi {
      * @param phones 手机号。手机号最大个数限制1000
      * @return
      */
-    public SmsSendResponse sendHasVar(String  templateCode, LinkedList<String> params, Set<String> phones) throws Exception {
+    public SmsResponse<MessageSendResVo> sendHasVar(String  templateCode, LinkedList<String> params, Set<String> phones) throws Exception {
         //手机号先去重，然后再转换
         return smsSendTool.send(templateCode,params,phones,null);
     }
-    public SmsSendResponse sendHasVar(String  templateCode, LinkedList<String> params, Set<String> phones, String upExtendCode) throws Exception {
+    public SmsResponse<MessageSendResVo> sendHasVar(String  templateCode, LinkedList<String> params, Set<String> phones, String upExtendCode) throws Exception {
         //手机号先去重，然后再转换
         return smsSendTool.send(templateCode,params,phones,upExtendCode);
     }
@@ -57,10 +58,10 @@ public final class SendSmsApi {
      * @param phonesAndParams 手机号-手机号对应的模板参数。手机号最大个数限制500
      * @return
      */
-    public SmsSendResponse sendPhoneToContent(String templateCode, Map<String,LinkedList<String>> phonesAndParams) throws Exception {
+    public SmsResponse<MessageSendResVo> sendPhoneToContent(String templateCode, Map<String,LinkedList<String>> phonesAndParams) throws Exception {
         return smsSendTool.sendBatch(templateCode,phonesAndParams,null);
     }
-    public SmsSendResponse sendPhoneToContent(String templateCode, Map<String,LinkedList<String>> phonesAndParams, String upExtendCode) throws Exception {
+    public SmsResponse<MessageSendResVo> sendPhoneToContent(String templateCode, Map<String,LinkedList<String>> phonesAndParams, String upExtendCode) throws Exception {
         return smsSendTool.sendBatch(templateCode,phonesAndParams,upExtendCode);
     }
 }

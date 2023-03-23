@@ -1,16 +1,15 @@
 package io.github.silencelwy.smsapi.tool;
 
 
+import com.alibaba.fastjson.TypeReference;
 import io.github.silencelwy.smsapi.client.AccessKeyUtils;
 import io.github.silencelwy.smsapi.client.SmsSendClient;
 import io.github.silencelwy.smsapi.client.SmsStringUtils;
 import io.github.silencelwy.smsapi.request.ApiRequest;
 import io.github.silencelwy.smsapi.request.ApiResponse;
 import io.github.silencelwy.smsapi.vo.MessageSendResVo;
-import io.github.silencelwy.smsapi.vo.SmsSendResponse;
+import io.github.silencelwy.smsapi.vo.SmsResponse;
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.TypeReference;
-
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -36,7 +35,7 @@ public class SmsSendTool {
      * @param phones       手机号。手机号最大个数限制1000
      * @return
      */
-    public SmsSendResponse send(String templateCode, Set<String> phones, String upExtendCode) throws Exception {
+    public SmsResponse<MessageSendResVo> send(String templateCode, Set<String> phones, String upExtendCode) throws Exception {
         return sendSingleton(templateCode, null, phones, upExtendCode);
     }
 
@@ -48,7 +47,7 @@ public class SmsSendTool {
      * @param phones       手机号。手机号最大个数限制1000
      * @return
      */
-    public SmsSendResponse send(String templateCode, LinkedList<String> params, Set<String> phones, String upExtendCode) throws Exception {
+    public SmsResponse<MessageSendResVo> send(String templateCode, LinkedList<String> params, Set<String> phones, String upExtendCode) throws Exception {
         return sendSingleton(templateCode, params, phones, upExtendCode);
     }
 
@@ -62,7 +61,7 @@ public class SmsSendTool {
      * @return HttpResponse
      * @throws IOException
      */
-    private SmsSendResponse sendSingleton(String templateCode, LinkedList<String> params, Set<String> phoneSet, String upExtendCode) throws Exception {
+    private SmsResponse<MessageSendResVo> sendSingleton(String templateCode, LinkedList<String> params, Set<String> phoneSet, String upExtendCode) throws Exception {
         if (SmsStringUtils.isBlank(templateCode)) {
             throw new NullPointerException("模板id不能为空");
         }
@@ -104,10 +103,10 @@ public class SmsSendTool {
         ApiResponse post = SmsSendClient.post(request);
         int status = post.getStatus();
         if (status != 200){
-            return SmsSendResponse.error(status,"网络请求异常，域名或者请求地址不正确");
+            return SmsResponse.error(status,"网络请求异常，域名或者请求地址不正确");
         }
         String body = new String(post.getBody());
-        SmsSendResponse smsResponse = JSON.parseObject(body, new TypeReference<SmsSendResponse<MessageSendResVo>>(){});
+        SmsResponse<MessageSendResVo> smsResponse = JSON.parseObject(body, new TypeReference<SmsResponse<MessageSendResVo>>(){});
         return smsResponse;
     }
 
@@ -119,7 +118,7 @@ public class SmsSendTool {
      * @return HttpResponse
      * @throws IOException
      */
-    public SmsSendResponse sendBatch(String templateCode, Map<String, LinkedList<String>> phonesAndParams, String upExtendCode) throws Exception {
+    public SmsResponse<MessageSendResVo> sendBatch(String templateCode, Map<String, LinkedList<String>> phonesAndParams, String upExtendCode) throws Exception {
         if (SmsStringUtils.isBlank(templateCode)) {
             throw new NullPointerException("模板id不能为空");
         }
@@ -143,10 +142,10 @@ public class SmsSendTool {
         ApiResponse post = SmsSendClient.post(request);
         int status = post.getStatus();
         if (status != 200){
-            return SmsSendResponse.error(status,"网络请求异常，域名或者请求地址不正确");
+            return SmsResponse.error(status,"网络请求异常，域名或者请求地址不正确");
         }
         String body = new String(post.getBody());
-        SmsSendResponse smsResponse = JSON.parseObject(body, new TypeReference<SmsSendResponse<MessageSendResVo>>(){});
+        SmsResponse<MessageSendResVo> smsResponse = JSON.parseObject(body, new TypeReference<SmsResponse<MessageSendResVo>>(){});
         return smsResponse;
     }
 }

@@ -6,9 +6,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 
-/**
- * @author gusy
- */
+
 public class ApiRequest implements Serializable {
 
     private Map<String, Object> headers;
