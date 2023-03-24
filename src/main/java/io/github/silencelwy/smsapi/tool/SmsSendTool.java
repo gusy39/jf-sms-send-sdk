@@ -127,6 +127,9 @@ public class SmsSendTool {
         if (phonesAndParams == null || phonesAndParams.size() == 0) {
             return SmsResponse.error(40004,"phonesAndParams参数不能为空");
         }
+        if (!SmsStringUtils.isBlank(upExtendCode) && !SmsStringUtils.isNumeric(upExtendCode)) {
+            return SmsResponse.error(40004,"扩展号必须为数字");
+        }
 
         String phonesJSON = JSON.toJSONString(phonesAndParams.keySet());
         Map<String, Object> bodyParams = new HashMap<>(4);
@@ -134,6 +137,9 @@ public class SmsSendTool {
         //模板变量内容
         bodyParams.put("templateParamJson", JSON.toJSONString(phonesAndParams.values()));
         bodyParams.put("templateCode", templateCode);
+        if (!SmsStringUtils.isBlank(upExtendCode) ) {
+            bodyParams.put("upExtendCode", upExtendCode);
+        }
 
         Map<String, Object> headers = AccessKeyUtils.getHeaders(apiKey, accessKey, bodyParams);
         ApiRequest request = new ApiRequest();
