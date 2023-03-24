@@ -28,14 +28,14 @@ public class ArriveInfoTool {
 
     public SmsResponse<List<ArriveInfoResVo>> getArriveInfo(Set<String> msgIdSet){
         if (msgIdSet == null || msgIdSet.size() == 0){
-            return SmsResponse.error(4001,"任务id集合为空");
+            return SmsResponse.error(40004,"任务id集合为空");
         }
         if (msgIdSet.size() > 600){
-            return SmsResponse.error(4001,"单次查询任务量不超过600条");
+            return SmsResponse.error(40004,"单次查询任务量不超过600条");
         }
         String msgIdStr = msgIdSet.stream().filter(taskId -> SmsStringUtils.isNumeric(taskId)).collect(Collectors.joining(","));
         if (SmsStringUtils.isBlank(msgIdStr)){
-            return SmsResponse.error(4001,"请传入正确的任务id");
+            return SmsResponse.error(40004,"请传入正确的任务id");
         }
         Map<String, Object> bodyParams = new HashMap<>(1);
         bodyParams.put("msgId",msgIdStr);
