@@ -1,6 +1,6 @@
 # 使用说明
 
-## 0：引入依赖包
+## 引入依赖包
 ```xml
 <dependency>
     <groupId>io.github.silencelwy</groupId>
@@ -8,6 +8,8 @@
     <version>1.0.0-RELEASE</version>
 </dependency>
 ```
+
+
 ## 1：短信发送示例
 短信发送一般分为
 + 固定内容短信模板，
@@ -16,9 +18,9 @@
 
 ### 1.1 初始化短信发送api
 ```java
-    //        String apiKey = "f96d8df8c789fc7341e9875d4c631b7";
+    //        String apiKey = "f96d8488c789fc7341e9875d4c631b7";
     static String apiKey = "你自己的apiKey";
-    //        String accessKey = "2cfd7hj0d9ad4c257d802a34364781b88ea09471120a1d23686584b958d227b";
+    //        String accessKey = "2cfd72a0d9ad4c257d802a34364781b88ea09471120a1d23686584b958d227b";
     static String accessKey = "你自己的AccessKey";
     //方式1：默认域名获取示例(推荐)
     private SendSmsApi sendSmsApi = SendSmsApi.getInstance(apiKey, accessKey);
@@ -50,8 +52,9 @@
         phoneSet.add("手机号2");
 
         SmsResponse<MessageSendResVo> send = sendSmsApi.send(templateCode, phoneSet);
-        //如果有扩展号需求，替换为以下方法，末尾输入你自己的扩展号,扩展号为数字
-        //SmsResponse<MessageSendResVo> send = sendSmsApi.send(templateCode, phoneSet,"xx");
+        //如果有扩展号或者业务id需求：多传入两个字段 扩展号和自身业务id 两个字段均非必传 如果无须传入，传null即可
+        // 扩展号为数字；业务id最长长度为64位
+//        SmsResponse<MessageSendResVo> send = sendSmsApi.send(templateCode, phoneSet,"xx","xxxxyyy");
         System.out.println(JSON.toJSONString(send));
         //如果发送有问题，提供该值给平台咨询
         String requestId = send.getRequestId();
@@ -101,8 +104,9 @@
         phoneSet.add("手机号2");
 
         SmsResponse<MessageSendResVo> send = sendSmsApi.sendHasVar(templateCode, paramList, phoneSet);
-        //如果有扩展号需求，替换为以下方法，末尾输入你自己的扩展号,扩展号为数字
-        //SmsResponse<MessageSendResVo> send = sendSmsApi.sendHasVar(templateCode, paramList, phoneSet, "xx");
+        //如果有扩展号或者业务id需求：多传入两个字段 扩展号和自身业务id 两个字段均非必传 如果无须传入，传null即可
+        // 扩展号为数字；业务id最长长度为64位
+        // SmsResponse<MessageSendResVo> send = sendSmsApi.sendHasVar(templateCode, paramList, phoneSet, "xx","xxxxyyyy");
         System.out.println(JSON.toJSONString(send));
         //如果发送有问题，提供该值给平台咨询
         String requestId = send.getRequestId();
@@ -125,6 +129,7 @@
      * 普通带变量的模板发送，模板内容有变量，每个手机号收到的内容不一样
      * 如模板号：7671218232469217791
      * 模板内容：你本次收入${收入,10}元。
+     * <p>
      * // 1811654xxxx(手机号1)收到 【企业签名】你本次收入300.09元。
      * // 1876789xxxx(手机号2)收到 【企业签名】你本次收入222元。
      */
@@ -152,8 +157,9 @@
         phonesAndParams.put(phone2, paramList2);
 
         SmsResponse<MessageSendResVo> send = sendSmsApi.sendPhoneToContent(templateCode, phonesAndParams);
-        //如果有扩展号需求，替换为以下方法，末尾输入你自己的扩展号,扩展号为数字
-        //SmsResponse<MessageSendResVo> send = sendSmsApi.sendPhoneToContent(templateCode, phonesAndParams,"xx");
+        //如果有扩展号或者业务id需求：多传入两个字段 扩展号和自身业务id 两个字段均非必传 如果无须传入，传null即可
+        // 扩展号为数字；业务id最长长度为64位
+        //SmsResponse<MessageSendResVo> send = sendSmsApi.sendPhoneToContent(templateCode, phonesAndParams,"xx","xxxxyyyy");
         System.out.println(JSON.toJSONString(send));
         //如果发送有问题，提供该值给平台咨询
         String requestId = send.getRequestId();
@@ -199,7 +205,12 @@
 ```
 ### 2.2：回执查询示例
 ```java
-   @Test
+    /**
+     * 任务号：836281956443505664，836281566675434496
+     * 只支持查询24小时以内记录
+     * 查询到达结果，多个查询结果，返回以下示例结构
+     */
+    @Test
     public void testGetArriveInfo() {
         //任务号，最多不超过600，提交发送成功后返回的msgId
         Set<String> msgIdSet = new HashSet<>();
@@ -219,6 +230,8 @@
                     String tel = arriveInfoResVo.getTel();
                     //任务号
                     String msgId = arriveInfoResVo.getMsgId();
+                    //短信发送时传入的业务id，发送时没有传入该字段，字段返回为空（可无视）
+                    //String bid = arriveInfoResVo.getBid();
                 });
             }
         }
@@ -234,6 +247,7 @@
 |              | msgId  |        |每一批短信编号         |
 |              | tel |        |  提交失败的手机号  |
 |              | arrive |        |  除DELIVRD外，其他都是未送达  |
+|              | bid |        |  短信发送时传入的bid，没有使用到可无视该字段即可  |
 
 ## 三：返回码说明
 每次调用接口时，可能获得正确或错误的返回码，开发者可以根据返回码信息调试接口，排查错误。

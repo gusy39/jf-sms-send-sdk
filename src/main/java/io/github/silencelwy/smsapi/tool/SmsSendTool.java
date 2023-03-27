@@ -30,57 +30,35 @@ public class SmsSendTool {
     }
 
     /**
-     * 短信发送。无参短信模板内容发送，即所有手机号接收到的短信内容一样
-     *
-     * @param templateCode
-     * @param phones       手机号。手机号最大个数限制1000
-     * @return
-     */
-    public SmsResponse<MessageSendResVo> send(String templateCode, Set<String> phones, String upExtendCode) {
-        return sendSingleton(templateCode, null, phones, upExtendCode);
-    }
-
-    /**
-     * 短信发送。带参短信模板内容发送，即所有手机号接收到的短信内容一样
-     *
-     * @param templateCode
-     * @param params       参数变量值，一般是模板变量。如果是带动态签名，再增加一个变量。
-     * @param phones       手机号。手机号最大个数限制1000
-     * @return
-     */
-    public SmsResponse<MessageSendResVo> send(String templateCode, LinkedList<String> params, Set<String> phones, String upExtendCode) {
-        return sendSingleton(templateCode, params, phones, upExtendCode);
-    }
-
-
-    /**
      * 所有号码收到内容一致的短信发送。
      *
      * @param templateCode 模板ID
      * @param params       模板参数
      * @param phoneSet     手机号
+     * @param bid          客户端业务ID，长度不超过64字符
      * @return HttpResponse
      * @throws IOException
      */
-    private SmsResponse<MessageSendResVo> sendSingleton(String templateCode, LinkedList<String> params, Set<String> phoneSet, String upExtendCode) {
+    public SmsResponse<MessageSendResVo> sendSingleton(String templateCode, LinkedList<String> params, Set<String> phoneSet, String upExtendCode, String bid) {
         if (SmsStringUtils.isBlank(templateCode)) {
-            return SmsResponse.error(40004,"模板id不能为空");
+            return SmsResponse.error(40004, "模板id不能为空");
         }
         if (phoneSet == null || phoneSet.size() == 0) {
-            return SmsResponse.error(40004,"手机号码数量不能为空");
+            return SmsResponse.error(40004, "手机号码数量不能为空");
         }
-        if (!SmsStringUtils.isBlank(upExtendCode)) {
-            if (!SmsStringUtils.isNumeric(upExtendCode)) {
-                return SmsResponse.error(40004,"扩展号必须为数字");
-            }
+        if (!SmsStringUtils.isBlank(upExtendCode) && !SmsStringUtils.isNumeric(upExtendCode)) {
+            return SmsResponse.error(40004, "扩展号必须为数字");
+        }
+        if (!SmsStringUtils.isBlank(bid) && bid.length() > 64) {
+            return SmsResponse.error(40004, "业务bid长度不能超过64位");
         }
         Set<String> phones = phoneSet.stream().filter(phone ->
                 SmsStringUtils.checkPhone(phone)).collect(Collectors.toSet());
         if (phones == null || phones.size() == 0) {
-            return SmsResponse.error(40004,"手机号码格式错误，没有可用的手机号");
+            return SmsResponse.error(40004, "手机号码格式错误，没有可用的手机号");
         }
         if (phones.size() > 1000) {
-            return SmsResponse.error(40004,"手机号码数量一次性不能超过1000");
+            return SmsResponse.error(40004, "手机号码数量一次性不能超过1000");
         }
 
         String phonesStr = phones.stream().collect(Collectors.toSet()).stream().collect(Collectors.joining(","));
@@ -94,6 +72,9 @@ public class SmsSendTool {
         if (!SmsStringUtils.isBlank(upExtendCode)) {
             bodyParams.put("upExtendCode", upExtendCode);
         }
+        if (!SmsStringUtils.isBlank(bid)) {
+            bodyParams.put("bid", bid);
+        }
 
         Map<String, Object> headers = AccessKeyUtils.getHeaders(apiKey, accessKey, bodyParams);
         ApiRequest request = new ApiRequest();
@@ -106,6 +87,7 @@ public class SmsSendTool {
         if (status != 200) {
             return SmsResponse.error(status, "网络请求异常，域名或者请求地址不正确");
         }
+
         String body = new String(post.getBody());
         SmsResponse<MessageSendResVo> smsResponse = JSON.parseObject(body, new TypeReference<SmsResponse<MessageSendResVo>>() {
         });
@@ -120,15 +102,18 @@ public class SmsSendTool {
      * @return HttpResponse
      * @throws IOException
      */
-    public SmsResponse<MessageSendResVo> sendBatch(String templateCode, Map<String, LinkedList<String>> phonesAndParams, String upExtendCode) {
+    public SmsResponse<MessageSendResVo> sendBatch(String templateCode, Map<String, LinkedList<String>> phonesAndParams, String upExtendCode, String bid) {
         if (SmsStringUtils.isBlank(templateCode)) {
-            return SmsResponse.error(40004,"模板id不能为空");
+            return SmsResponse.error(40004, "模板id不能为空");
         }
         if (phonesAndParams == null || phonesAndParams.size() == 0) {
-            return SmsResponse.error(40004,"phonesAndParams参数不能为空");
+            return SmsResponse.error(40004, "phonesAndParams参数不能为空");
         }
         if (!SmsStringUtils.isBlank(upExtendCode) && !SmsStringUtils.isNumeric(upExtendCode)) {
-            return SmsResponse.error(40004,"扩展号必须为数字");
+            return SmsResponse.error(40004, "扩展号必须为数字");
+        }
+        if (!SmsStringUtils.isBlank(bid) && bid.length() > 64) {
+            return SmsResponse.error(40004, "业务bid长度不能超过64位");
         }
 
         String phonesJSON = JSON.toJSONString(phonesAndParams.keySet());
@@ -137,8 +122,11 @@ public class SmsSendTool {
         //模板变量内容
         bodyParams.put("templateParamJson", JSON.toJSONString(phonesAndParams.values()));
         bodyParams.put("templateCode", templateCode);
-        if (!SmsStringUtils.isBlank(upExtendCode) ) {
+        if (!SmsStringUtils.isBlank(upExtendCode)) {
             bodyParams.put("upExtendCode", upExtendCode);
+        }
+        if (!SmsStringUtils.isBlank(bid)) {
+            bodyParams.put("bid", bid);
         }
 
         Map<String, Object> headers = AccessKeyUtils.getHeaders(apiKey, accessKey, bodyParams);

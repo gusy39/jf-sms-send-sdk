@@ -16,6 +16,7 @@ public final class SendSmsApi {
     private SendSmsApi(String domainEnumUrl, String apiKey, String accessKey) {
         smsSendTool = new SmsSendTool(domainEnumUrl, apiKey, accessKey);
     }
+
     public static SendSmsApi getInstance(String apiKey, String accessKey) {
         return new SendSmsApi(DomainEnum.DEFAULT.getUrl(), apiKey, accessKey);
     }
@@ -35,11 +36,11 @@ public final class SendSmsApi {
      * @return
      */
     public SmsResponse<MessageSendResVo> send(String templateCode, Set<String> phones) {
-        return smsSendTool.send(templateCode, phones, null);
+        return smsSendTool.sendSingleton(templateCode, null,phones, null, null);
     }
 
-    public SmsResponse<MessageSendResVo> send(String templateCode, Set<String> phones, String upExtendCode) {
-        return smsSendTool.send(templateCode, phones, upExtendCode);
+    public SmsResponse<MessageSendResVo> send(String templateCode, Set<String> phones, String upExtendCode, String bid) {
+        return smsSendTool.sendSingleton(templateCode, null,phones, upExtendCode, bid);
     }
 
     /**
@@ -51,13 +52,16 @@ public final class SendSmsApi {
      * @return
      */
     public SmsResponse<MessageSendResVo> sendHasVar(String templateCode, LinkedList<String> params, Set<String> phones) {
-        //手机号先去重，然后再转换
-        return smsSendTool.send(templateCode, params, phones, null);
+        //
+        if (params == null || params.size() ==0){
+
+        }
+        return smsSendTool.sendSingleton(templateCode, params, phones, null, null);
     }
 
-    public SmsResponse<MessageSendResVo> sendHasVar(String templateCode, LinkedList<String> params, Set<String> phones, String upExtendCode) {
+    public SmsResponse<MessageSendResVo> sendHasVar(String templateCode, LinkedList<String> params, Set<String> phones, String upExtendCode, String bid) {
         //手机号先去重，然后再转换
-        return smsSendTool.send(templateCode, params, phones, upExtendCode);
+        return smsSendTool.sendSingleton(templateCode, params, phones, upExtendCode, bid);
     }
 
     /**
@@ -68,10 +72,10 @@ public final class SendSmsApi {
      * @return
      */
     public SmsResponse<MessageSendResVo> sendPhoneToContent(String templateCode, Map<String, LinkedList<String>> phonesAndParams) {
-        return smsSendTool.sendBatch(templateCode, phonesAndParams, null);
+        return smsSendTool.sendBatch(templateCode, phonesAndParams, null, null);
     }
 
-    public SmsResponse<MessageSendResVo> sendPhoneToContent(String templateCode, Map<String, LinkedList<String>> phonesAndParams, String upExtendCode) {
-        return smsSendTool.sendBatch(templateCode, phonesAndParams, upExtendCode);
+    public SmsResponse<MessageSendResVo> sendPhoneToContent(String templateCode, Map<String, LinkedList<String>> phonesAndParams, String upExtendCode, String bid) {
+        return smsSendTool.sendBatch(templateCode, phonesAndParams, upExtendCode, bid);
     }
 }

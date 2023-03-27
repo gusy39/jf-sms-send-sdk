@@ -6,6 +6,7 @@ public class ArriveInfoResVo implements Serializable {
     private String msgId;
     private String arrive;
     private String tel;
+    private String bid;
 
     public String getMsgId() {
         return msgId;
@@ -29,5 +30,13 @@ public class ArriveInfoResVo implements Serializable {
 
     public void setTel(String tel) {
         this.tel = tel;
+    }
+
+    public String getBid() {
+        return bid;
+    }
+
+    public void setBid(String bid) {
+        this.bid = bid;
     }
 }
