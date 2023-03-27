@@ -6,9 +6,9 @@
 
 ### 1.1 初始化短信发送api
 ```java
-    //        String apiKey = "f96d8488c789fc7341e9875d4c631b7";
+    //        String apiKey = "f96d8df8c789fc7341e9875d4c631b7";
     static String apiKey = "你自己的apiKey";
-    //        String accessKey = "2cfd72a0d9ad4c257d802a34364781b88ea09471120a1d23686584b958d227b";
+    //        String accessKey = "2cfd7hj0d9ad4c257d802a34364781b88ea09471120a1d23686584b958d227b";
     static String accessKey = "你自己的AccessKey";
     //方式1：默认域名获取示例(推荐)
     private SendSmsApi sendSmsApi = SendSmsApi.getInstance(apiKey, accessKey);
