@@ -16,6 +16,9 @@ public final class SendSmsApi {
     private SendSmsApi(String domainEnumUrl, String apiKey, String accessKey) {
         smsSendTool = new SmsSendTool(domainEnumUrl, apiKey, accessKey);
     }
+    public static SendSmsApi getInstance(String apiKey, String accessKey) {
+        return new SendSmsApi(DomainEnum.DEFAULT.getUrl(), apiKey, accessKey);
+    }
 
     public static SendSmsApi getInstance(String domainUrl, String apiKey, String accessKey) {
         if (domainUrl == null) {

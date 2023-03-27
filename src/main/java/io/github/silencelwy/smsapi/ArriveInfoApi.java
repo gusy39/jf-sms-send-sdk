@@ -2,7 +2,6 @@ package io.github.silencelwy.smsapi;
 
 import io.github.silencelwy.smsapi.client.DomainEnum;
 import io.github.silencelwy.smsapi.tool.ArriveInfoTool;
-import io.github.silencelwy.smsapi.tool.SmsSendTool;
 import io.github.silencelwy.smsapi.vo.ArriveInfoResVo;
 import io.github.silencelwy.smsapi.vo.SmsResponse;
 
@@ -17,6 +16,9 @@ public final class ArriveInfoApi {
         arriveInfoTool = new ArriveInfoTool(domainEnumUrl,apiKey,accessKey);
     }
 
+    public static ArriveInfoApi getInstance(String apiKey,String accessKey){
+        return new ArriveInfoApi(DomainEnum.DEFAULT.getUrl(),apiKey,accessKey);
+    }
     public static ArriveInfoApi getInstance(String domainUrl,String apiKey,String accessKey){
         if (domainUrl == null){
             domainUrl = DomainEnum.DEFAULT.getUrl();
