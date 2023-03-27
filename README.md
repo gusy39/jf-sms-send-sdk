@@ -1,3 +1,13 @@
+# 使用说明
+
+## 0：引入依赖包
+```xml
+<dependency>
+    <groupId>io.github.silencelwy</groupId>
+    <artifactId>jf-sms-send-sdk</artifactId>
+    <version>1.0.0-RELEASE</version>
+</dependency>
+```
 ## 1：短信发送示例
 短信发送一般分为
 + 固定内容短信模板，
