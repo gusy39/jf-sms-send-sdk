@@ -4,7 +4,6 @@ import java.io.Serializable;
 
 public class MessageSendResVo implements Serializable {
     private String msgId;
-    private Integer status;
     private String desc;
     private String failPhones;
 
@@ -15,14 +14,6 @@ public class MessageSendResVo implements Serializable {
 
     public void setMsgId(String msgId) {
         this.msgId = msgId;
-    }
-
-    public Integer getStatus() {
-        return status;
-    }
-
-    public void setStatus(Integer status) {
-        this.status = status;
     }
 
     public String getDesc() {
