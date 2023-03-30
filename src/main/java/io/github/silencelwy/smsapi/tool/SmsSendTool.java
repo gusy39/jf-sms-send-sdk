@@ -85,7 +85,7 @@ public class SmsSendTool {
         ApiResponse post = SmsSendClient.post(request);
         int status = post.getStatus();
         if (status != 200) {
-            return SmsResponse.error(status, "网络请求异常，域名或者请求地址不正确");
+            return SmsResponse.error(status, "网络请求异常："+url);
         }
 
         String body = new String(post.getBody());
@@ -138,7 +138,7 @@ public class SmsSendTool {
         ApiResponse post = SmsSendClient.post(request);
         int status = post.getStatus();
         if (status != 200) {
-            return SmsResponse.error(status, "网络请求异常，域名或者请求地址不正确");
+            return SmsResponse.error(status, "网络请求异常："+url);
         }
         String body = new String(post.getBody());
         SmsResponse<MessageSendResVo> smsResponse = JSON.parseObject(body, new TypeReference<SmsResponse<MessageSendResVo>>() {

@@ -13,19 +13,37 @@ public final class SendSmsApi {
 
     private volatile static SmsSendTool smsSendTool;
 
+    private volatile static SendSmsApi sendSmsApi;
+
+    private volatile static SendSmsApi sendSmsApiDefault;
+
     private SendSmsApi(String domainEnumUrl, String apiKey, String accessKey) {
         smsSendTool = new SmsSendTool(domainEnumUrl, apiKey, accessKey);
     }
 
     public static SendSmsApi getInstance(String apiKey, String accessKey) {
-        return new SendSmsApi(DomainEnum.DEFAULT.getUrl(), apiKey, accessKey);
+        if (sendSmsApiDefault == null) {
+            synchronized (SendSmsApi.class) {
+                if (sendSmsApiDefault == null) {
+                    sendSmsApiDefault = new SendSmsApi(DomainEnum.DEFAULT.getUrl(), apiKey, accessKey);
+                }
+            }
+        }
+        return sendSmsApiDefault;
     }
 
     public static SendSmsApi getInstance(String domainUrl, String apiKey, String accessKey) {
-        if (domainUrl == null) {
-            domainUrl = DomainEnum.DEFAULT.getUrl();
+        if (sendSmsApi == null) {
+            synchronized (SendSmsApi.class) {
+                if (sendSmsApi == null) {
+                    if (domainUrl == null) {
+                        domainUrl = DomainEnum.DEFAULT.getUrl();
+                    }
+                    sendSmsApi = new SendSmsApi(domainUrl, apiKey, accessKey);
+                }
+            }
         }
-        return new SendSmsApi(domainUrl, apiKey, accessKey);
+        return sendSmsApi;
     }
 
     /**
@@ -36,11 +54,11 @@ public final class SendSmsApi {
      * @return
      */
     public SmsResponse<MessageSendResVo> send(String templateCode, Set<String> phones) {
-        return smsSendTool.sendSingleton(templateCode, null,phones, null, null);
+        return smsSendTool.sendSingleton(templateCode, null, phones, null, null);
     }
 
     public SmsResponse<MessageSendResVo> send(String templateCode, Set<String> phones, String upExtendCode, String bid) {
-        return smsSendTool.sendSingleton(templateCode, null,phones, upExtendCode, bid);
+        return smsSendTool.sendSingleton(templateCode, null, phones, upExtendCode, bid);
     }
 
     /**
@@ -53,8 +71,8 @@ public final class SendSmsApi {
      */
     public SmsResponse<MessageSendResVo> sendHasVar(String templateCode, LinkedList<String> params, Set<String> phones) {
         //
-        if (params == null || params.size() ==0){
-
+        if (params == null || params.size() == 0) {
+            return SmsResponse.error(40004, "参数不能为空");
         }
         return smsSendTool.sendSingleton(templateCode, params, phones, null, null);
     }

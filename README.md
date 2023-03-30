@@ -5,7 +5,7 @@
 <dependency>
     <groupId>io.github.silencelwy</groupId>
     <artifactId>jf-sms-send-sdk</artifactId>
-    <version>1.0.0-RELEASE</version>
+    <version>1.0.3-RELEASE</version>
 </dependency>
 ```
 
