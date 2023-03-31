@@ -9,7 +9,6 @@ import io.github.silencelwy.smsapi.request.ApiRequest;
 import io.github.silencelwy.smsapi.request.ApiResponse;
 import io.github.silencelwy.smsapi.vo.ArriveInfoResVo;
 import io.github.silencelwy.smsapi.vo.SmsResponse;
-
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -47,10 +46,10 @@ public class ArriveInfoTool {
         request.setUrl(url);
         ApiResponse post = SmsSendClient.post(request);
         int status = post.getStatus();
-        if (status != 200){
-            return SmsResponse.error(status,"网络请求异常，域名或者请求地址不正确");
-        }
         String body = new String(post.getBody());
+        if (status != 200) {
+            return SmsResponse.error(status, "网络请求异常："+url+","+body);
+        }
         SmsResponse<List<ArriveInfoResVo>> smsResponse = JSON.parseObject(body, new TypeReference<SmsResponse<List<ArriveInfoResVo>>>(){});
         return smsResponse;
 

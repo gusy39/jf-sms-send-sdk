@@ -12,6 +12,7 @@ import io.github.silencelwy.smsapi.vo.SmsResponse;
 import com.alibaba.fastjson.JSON;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -84,11 +85,10 @@ public class SmsSendTool {
         request.setUrl(url);
         ApiResponse post = SmsSendClient.post(request);
         int status = post.getStatus();
-        if (status != 200) {
-            return SmsResponse.error(status, "网络请求异常："+url);
-        }
-
         String body = new String(post.getBody());
+        if (status != 200) {
+            return SmsResponse.error(status, "网络请求异常："+url+","+body);
+        }
         SmsResponse<MessageSendResVo> smsResponse = JSON.parseObject(body, new TypeReference<SmsResponse<MessageSendResVo>>() {
         });
         return smsResponse;
