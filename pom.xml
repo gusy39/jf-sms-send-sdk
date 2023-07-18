@@ -6,7 +6,7 @@
 
     <groupId>io.github.silencelwy</groupId>
     <artifactId>jf-sms-send-sdk</artifactId>
-    <version>1.0.3.1-RELEASE</version>
+    <version>1.0.3.2-RELEASE</version>
     <packaging>jar</packaging>
     <name>jf-sms-send-sdk</name>
     <description>a tool about send short message</description>

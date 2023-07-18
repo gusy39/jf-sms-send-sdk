@@ -5,16 +5,18 @@ import java.util.*;
 public final class AccessKeyUtils {
 
 
-    public static Map<String, Object> getHeaders(String apiKey,String accessKey,Map<String, Object> bodyParams){
+    public static HmacAlgorithms defaultHmacAlgorithms = HmacAlgorithms.HMAC_MD5;
+
+    public static Map<String, Object> getHeaders(String apiKey, String accessKey, Map<String, Object> bodyParams){
         Map<String, Object> headers = new HashMap<>();
         headers.put("x-api-key",apiKey);
-        headers.put("x-sign-method", HmacAlgorithms.HMAC_SHA_224.getName());
+        headers.put("x-sign-method", defaultHmacAlgorithms.getName());
         headers.put("x-nonce", getRandomNickname(10));
         headers.put("x-timestamp", String.valueOf(System.currentTimeMillis()));
         //排序
         SortedMap<String, Object> sortedMap = new TreeMap<>(bodyParams);
         headers.forEach((k, v) -> sortedMap.put(k, v));
-        headers.put("x-sign", getSignature(accessKey, sortedMap, HmacAlgorithms.HMAC_SHA_224));
+        headers.put("x-sign", getSignature(accessKey, sortedMap, defaultHmacAlgorithms));
         return headers;
     }
 
