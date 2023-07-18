@@ -5,7 +5,7 @@
 <dependency>
     <groupId>io.github.silencelwy</groupId>
     <artifactId>jf-sms-send-sdk</artifactId>
-    <version>1.0.3.1-RELEASE</version>
+    <version>1.0.3.2-RELEASE</version>
 </dependency>
 ```
 
@@ -51,6 +51,8 @@
         phoneSet.add("手机号1");
         phoneSet.add("手机号2");
 
+        // 以下可以修改默认数据加密方式，一般不需要修改
+        // AccessKeyUtils.defaultHmacAlgorithms = HmacAlgorithms.HMAC_SHA_224;
         SmsResponse<MessageSendResVo> send = sendSmsApi.send(templateCode, phoneSet);
         //如果有扩展号或者业务id需求：多传入两个字段 扩展号和自身业务id 两个字段均非必传 如果无须传入，传null即可
         // 扩展号为数字；业务id最长长度为64位
@@ -103,6 +105,8 @@
         phoneSet.add("手机号1");
         phoneSet.add("手机号2");
 
+        // 以下可以修改默认数据加密方式，一般不需要修改
+        // AccessKeyUtils.defaultHmacAlgorithms = HmacAlgorithms.HMAC_SHA_224;
         SmsResponse<MessageSendResVo> send = sendSmsApi.sendHasVar(templateCode, paramList, phoneSet);
         //如果有扩展号或者业务id需求：多传入两个字段 扩展号和自身业务id 两个字段均非必传 如果无须传入，传null即可
         // 扩展号为数字；业务id最长长度为64位
@@ -156,6 +160,8 @@
         paramList2.add("222");
         phonesAndParams.put(phone2, paramList2);
 
+        // 以下可以修改默认数据加密方式，一般不需要修改
+        // AccessKeyUtils.defaultHmacAlgorithms = HmacAlgorithms.HMAC_SHA_224;
         SmsResponse<MessageSendResVo> send = sendSmsApi.sendPhoneToContent(templateCode, phonesAndParams);
         //如果有扩展号或者业务id需求：多传入两个字段 扩展号和自身业务id 两个字段均非必传 如果无须传入，传null即可
         // 扩展号为数字；业务id最长长度为64位
@@ -218,6 +224,9 @@
 //        msgIdSet.add("836281956443505664");
 //        msgIdSet.add("836281566675434496");
         msgIdSet.add("填入msgId");
+
+        // 以下可以修改默认数据加密方式，一般不需要修改
+        // AccessKeyUtils.defaultHmacAlgorithms = HmacAlgorithms.HMAC_SHA_224;
         SmsResponse<List<ArriveInfoResVo>> smsResponse = arriveInfoApi.getArriveInfo(msgIdSet);
         System.out.println(JSON.toJSONString(smsResponse));
         if (200 == smsResponse.getCode()){
