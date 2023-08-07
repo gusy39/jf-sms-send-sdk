@@ -5,6 +5,7 @@ import java.io.Serializable;
 public class ArriveInfoResVo implements Serializable {
     private String msgId;
     private String arrive;
+    private String arriveTime;
     private String tel;
     private String bid;
 
@@ -22,6 +23,14 @@ public class ArriveInfoResVo implements Serializable {
 
     public void setArrive(String arrive) {
         this.arrive = arrive;
+    }
+
+    public String getArriveTime() {
+        return arriveTime;
+    }
+
+    public void setArriveTime(String arriveTime) {
+        this.arriveTime = arriveTime;
     }
 
     public String getTel() {

@@ -13,7 +13,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class ArriveInfoTool {
-    public static final String MESSAGE_ARRIVE_QRY = "sms/arrive/qry";
+    public static final String MESSAGE_ARRIVE_QRY = "sms/arriveRes/qry";
 
     private String domain;
     private String apiKey;

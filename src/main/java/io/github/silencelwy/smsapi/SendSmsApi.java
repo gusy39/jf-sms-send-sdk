@@ -1,5 +1,6 @@
 package io.github.silencelwy.smsapi;
 
+import com.sun.istack.internal.NotNull;
 import io.github.silencelwy.smsapi.client.DomainEnum;
 import io.github.silencelwy.smsapi.tool.SmsSendTool;
 import io.github.silencelwy.smsapi.vo.MessageSendResVo;
@@ -8,44 +9,48 @@ import io.github.silencelwy.smsapi.vo.SmsResponse;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 public final class SendSmsApi {
 
     private volatile static SmsSendTool smsSendTool;
 
-    private volatile static SendSmsApi sendSmsApi;
+    private volatile static ConcurrentHashMap<String, SendSmsApi> mapApi = new ConcurrentHashMap<>();
 
-    private volatile static SendSmsApi sendSmsApiDefault;
+    private static final String splitStr = "_";
 
     private SendSmsApi(String domainEnumUrl, String apiKey, String accessKey) {
         smsSendTool = new SmsSendTool(domainEnumUrl, apiKey, accessKey);
     }
 
     public static SendSmsApi getInstance(String apiKey, String accessKey) {
-        if (sendSmsApiDefault == null) {
+        if (!mapApi.containsKey(getKey(apiKey,DomainEnum.DEFAULT.getUrl()))) {
             synchronized (SendSmsApi.class) {
-                if (sendSmsApiDefault == null) {
-                    sendSmsApiDefault = new SendSmsApi(DomainEnum.DEFAULT.getUrl(), apiKey, accessKey);
+                if (!mapApi.containsKey(getKey(apiKey,DomainEnum.DEFAULT.getUrl()))) {
+                    mapApi.put(getKey(apiKey,DomainEnum.DEFAULT.getUrl()), new SendSmsApi(DomainEnum.DEFAULT.getUrl(), apiKey, accessKey));
                 }
             }
         }
-        return sendSmsApiDefault;
+        return mapApi.get(getKey(apiKey,DomainEnum.DEFAULT.getUrl()));
     }
 
     public static SendSmsApi getInstance(String domainUrl, String apiKey, String accessKey) {
-        if (sendSmsApi == null) {
+        if (domainUrl == null || domainUrl.trim().length() == 0) {
+            domainUrl = DomainEnum.DEFAULT.getUrl();
+        }
+        if (!mapApi.containsKey(getKey(apiKey,domainUrl))) {
             synchronized (SendSmsApi.class) {
-                if (sendSmsApi == null) {
-                    if (domainUrl == null) {
-                        domainUrl = DomainEnum.DEFAULT.getUrl();
-                    }
-                    sendSmsApi = new SendSmsApi(domainUrl, apiKey, accessKey);
+                if (!mapApi.containsKey(getKey(apiKey,domainUrl))) {
+                    mapApi.put(getKey(apiKey,domainUrl), new SendSmsApi(domainUrl, apiKey, accessKey));
                 }
             }
         }
-        return sendSmsApi;
+        return mapApi.get(getKey(apiKey,domainUrl));
     }
 
+    private static String getKey(@NotNull String apiKey,@NotNull String domain){
+        return apiKey + splitStr + domain;
+    }
     /**
      * 短信发送。无参短信模板内容发送，即所有手机号接收到的短信内容一样
      *
