@@ -1,6 +1,5 @@
 package io.github.silencelwy.smsapi;
 
-import com.sun.istack.internal.NotNull;
 import io.github.silencelwy.smsapi.client.DomainEnum;
 import io.github.silencelwy.smsapi.tool.SmsSendTool;
 import io.github.silencelwy.smsapi.vo.MessageSendResVo;
@@ -48,7 +47,7 @@ public final class SendSmsApi {
         return mapApi.get(getKey(apiKey,domainUrl));
     }
 
-    private static String getKey(@NotNull String apiKey,@NotNull String domain){
+    private static String getKey(String apiKey,String domain){
         return apiKey + splitStr + domain;
     }
     /**
