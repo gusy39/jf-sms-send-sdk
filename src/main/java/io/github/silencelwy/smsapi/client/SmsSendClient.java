@@ -32,6 +32,7 @@ public class SmsSendClient {
         String url = apiRequest.getUrl();
         Map<String, Object> bodyParams = apiRequest.getBodyParams();
         Request request = Request.Post(url)
+                .addHeader("Content-Type","application/json;charset=utf-8")
                 .version(HttpVersion.HTTP_1_1)
                 //设置连接超时
                 .connectTimeout(15000)
