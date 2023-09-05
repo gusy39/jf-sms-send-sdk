@@ -1,33 +1,29 @@
 package io.github.silencelwy.smsapi.request;
 
 import java.io.Serializable;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
-
-
 
 public class ApiRequest implements Serializable {
 
-    private Map<String, Object> headers;
+    private Map<String, String> headers;
 
-    private Map<String, Object> bodyParams;
+    private Map<String, String> bodyParams;
 
     private String url;
 
-    public Map<String, Object> getHeaders() {
+    public Map<String, String> getHeaders() {
         return headers;
     }
 
-    public void setHeaders(Map<String, Object> headers) {
+    public void setHeaders(Map<String, String> headers) {
         this.headers = headers;
     }
 
-    public Map<String, Object> getBodyParams() {
+    public Map<String, String> getBodyParams() {
         return bodyParams;
     }
 
-    public void setBodyParams(Map<String, Object> bodyParams) {
+    public void setBodyParams(Map<String, String> bodyParams) {
         this.bodyParams = bodyParams;
     }
 

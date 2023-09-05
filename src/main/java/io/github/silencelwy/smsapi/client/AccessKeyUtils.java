@@ -1,23 +1,31 @@
 package io.github.silencelwy.smsapi.client;
 
+import cn.hutool.crypto.digest.HMac;
+import cn.hutool.crypto.digest.HmacAlgorithm;
+
 import java.util.*;
 
 public final class AccessKeyUtils {
 
 
-    public static HmacAlgorithms defaultHmacAlgorithms = HmacAlgorithms.HMAC_MD5;
+    public static HmacAlgorithm defaultHmacAlgorithms = HmacAlgorithm.HmacMD5;
 
-    public static Map<String, Object> getHeaders(String apiKey, String accessKey, Map<String, Object> bodyParams){
-        Map<String, Object> headers = new HashMap<>();
-        headers.put("x-api-key",apiKey);
-        headers.put("x-sign-method", defaultHmacAlgorithms.getName());
-        headers.put("x-nonce", getRandomNickname(10));
-        headers.put("x-timestamp", String.valueOf(System.currentTimeMillis()));
+    public static Map<String, String> getHeaders(String apiKey, String accessKey, Map<String, String> bodyParams){
         //排序
-        SortedMap<String, Object> sortedMap = new TreeMap<>(bodyParams);
-        headers.forEach((k, v) -> sortedMap.put(k, v));
-        headers.put("x-sign", getSignature(accessKey, sortedMap, defaultHmacAlgorithms));
-        return headers;
+        SortedMap<String, String> sortedMap = new TreeMap<>(new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+                return o1.compareTo(o2);
+            }
+        });
+        sortedMap.put("x-api-key",apiKey);
+        sortedMap.put("x-sign-method", defaultHmacAlgorithms.getValue());
+        sortedMap.put("x-nonce", getRandomNickname(10));
+        sortedMap.put("x-timestamp", String.valueOf(System.currentTimeMillis()));
+
+        sortedMap.putAll(bodyParams);
+        sortedMap.put("x-sign", getSignature(accessKey, sortedMap, defaultHmacAlgorithms));
+        return sortedMap;
     }
 
 
@@ -25,21 +33,23 @@ public final class AccessKeyUtils {
      * 签名生成
      * @param secret
      * @param sortedMap
-     * @param hmacAlgorithms
+     * @param hmacAlgorithm
      * @return
      */
-    private static String getSignature(String secret, SortedMap<String, Object> sortedMap, HmacAlgorithms hmacAlgorithms) {
+    private static String getSignature(String secret, SortedMap<String, String> sortedMap, HmacAlgorithm hmacAlgorithm) {
         //  将参数拼接为字符串
         //  e.g. "key1=value1&key2=value2"
         StringBuffer plainText = new StringBuffer();
-        for (Map.Entry<String, Object> entry : sortedMap.entrySet()) {
+        for (Map.Entry<String, String> entry : sortedMap.entrySet()) {
             plainText.append(entry.getKey() + "=" + entry.getValue());
             plainText.append("&");
         }
         if(plainText != null && plainText.length()>0) {
             plainText.deleteCharAt(plainText.length() - 1);
         }
-        return HmacUtils.hmac(secret,plainText.toString(),hmacAlgorithms);
+        HMac mac = new HMac(hmacAlgorithm, secret.getBytes());
+        return mac.digestHex(plainText.toString());
+//        return HmacUtils.hmac(secret,plainText.toString(),hmacAlgorithms);
     }
 
     /**

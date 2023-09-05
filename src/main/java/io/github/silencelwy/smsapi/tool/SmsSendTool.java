@@ -1,7 +1,8 @@
 package io.github.silencelwy.smsapi.tool;
 
 
-import com.alibaba.fastjson.TypeReference;
+import cn.hutool.core.lang.TypeReference;
+import cn.hutool.json.JSONUtil;
 import io.github.silencelwy.smsapi.client.AccessKeyUtils;
 import io.github.silencelwy.smsapi.client.SmsSendClient;
 import io.github.silencelwy.smsapi.client.SmsStringUtils;
@@ -9,12 +10,9 @@ import io.github.silencelwy.smsapi.request.ApiRequest;
 import io.github.silencelwy.smsapi.request.ApiResponse;
 import io.github.silencelwy.smsapi.vo.MessageSendResVo;
 import io.github.silencelwy.smsapi.vo.SmsResponse;
-import com.alibaba.fastjson.JSON;
-
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class SmsSendTool {
     private static final String MESSAGE_SEND = "message/send";
@@ -53,8 +51,13 @@ public class SmsSendTool {
         if (!SmsStringUtils.isBlank(bid) && bid.length() > 64) {
             return SmsResponse.error(40004, "业务bid长度不能超过64位");
         }
-        Set<String> phones = phoneSet.stream().filter(phone ->
-                SmsStringUtils.checkPhone(phone)).collect(Collectors.toSet());
+        Set<String> phones = new HashSet<>();
+
+        for (String phone:phoneSet){
+            if (SmsStringUtils.checkPhone(phone)){
+                phones.add(phone);
+            }
+        }
         if (phones == null || phones.size() == 0) {
             return SmsResponse.error(40004, "手机号码格式错误，没有可用的手机号");
         }
@@ -62,12 +65,23 @@ public class SmsSendTool {
             return SmsResponse.error(40004, "手机号码数量一次性不能超过1000");
         }
 
-        String phonesStr = phones.stream().collect(Collectors.toSet()).stream().collect(Collectors.joining(","));
-        Map<String, Object> bodyParams = new HashMap<>(4);
-        bodyParams.put("phones", phonesStr);
+
+        StringBuffer stringBuffer = new StringBuffer();
+        for (String phone:phones){
+            stringBuffer.append(phone+",");
+        }
+        String phoneStr = stringBuffer.toString();
+        if (SmsStringUtils.isBlank(phoneStr)){
+            return SmsResponse.error(40004,"请传入正确的任务id");
+        }else {
+            phoneStr = phoneStr.substring(0,phoneStr.length()-1);
+        }
+
+        Map<String, String> bodyParams = new HashMap<>(4);
+        bodyParams.put("phones", phoneStr);
         //模板变量内容
         if (params != null && params.size() > 0) {
-            bodyParams.put("templateParam", JSON.toJSONString(params));
+            bodyParams.put("templateParam", JSONUtil.toJsonStr(params));
         }
         bodyParams.put("templateCode", templateCode);
         if (!SmsStringUtils.isBlank(upExtendCode)) {
@@ -77,7 +91,7 @@ public class SmsSendTool {
             bodyParams.put("bid", bid);
         }
 
-        Map<String, Object> headers = AccessKeyUtils.getHeaders(apiKey, accessKey, bodyParams);
+        Map<String, String> headers = AccessKeyUtils.getHeaders(apiKey, accessKey, bodyParams);
         ApiRequest request = new ApiRequest();
         request.setBodyParams(bodyParams);
         request.setHeaders(headers);
@@ -85,12 +99,17 @@ public class SmsSendTool {
         request.setUrl(url);
         ApiResponse post = SmsSendClient.post(request);
         int status = post.getStatus();
-        String body = new String(post.getBody());
+        String body = null;
+        try {
+            body = new String(post.getBody(),"utf-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
         if (status != 200) {
             return SmsResponse.error(status, "网络请求异常："+url+","+body);
         }
-        SmsResponse<MessageSendResVo> smsResponse = JSON.parseObject(body, new TypeReference<SmsResponse<MessageSendResVo>>() {
-        });
+        SmsResponse<MessageSendResVo> smsResponse = JSONUtil.toBean(body, new TypeReference<SmsResponse<MessageSendResVo>>() {
+        }, true);
         return smsResponse;
     }
 
@@ -116,11 +135,11 @@ public class SmsSendTool {
             return SmsResponse.error(40004, "业务bid长度不能超过64位");
         }
 
-        String phonesJSON = JSON.toJSONString(phonesAndParams.keySet());
-        Map<String, Object> bodyParams = new HashMap<>(4);
+        String phonesJSON = JSONUtil.toJsonStr(phonesAndParams.keySet());
+        Map<String, String> bodyParams = new HashMap<>(4);
         bodyParams.put("phonesJson", phonesJSON);
         //模板变量内容
-        bodyParams.put("templateParamJson", JSON.toJSONString(phonesAndParams.values()));
+        bodyParams.put("templateParamJson", JSONUtil.toJsonStr(phonesAndParams.values()));
         bodyParams.put("templateCode", templateCode);
         if (!SmsStringUtils.isBlank(upExtendCode)) {
             bodyParams.put("upExtendCode", upExtendCode);
@@ -129,7 +148,7 @@ public class SmsSendTool {
             bodyParams.put("bid", bid);
         }
 
-        Map<String, Object> headers = AccessKeyUtils.getHeaders(apiKey, accessKey, bodyParams);
+        Map<String, String> headers = AccessKeyUtils.getHeaders(apiKey, accessKey, bodyParams);
         ApiRequest request = new ApiRequest();
         request.setBodyParams(bodyParams);
         request.setHeaders(headers);
@@ -140,9 +159,14 @@ public class SmsSendTool {
         if (status != 200) {
             return SmsResponse.error(status, "网络请求异常："+url);
         }
-        String body = new String(post.getBody());
-        SmsResponse<MessageSendResVo> smsResponse = JSON.parseObject(body, new TypeReference<SmsResponse<MessageSendResVo>>() {
-        });
+        String body = null;
+        try {
+            body = new String(post.getBody(),"utf-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        SmsResponse<MessageSendResVo> smsResponse = JSONUtil.toBean(body, new TypeReference<SmsResponse<MessageSendResVo>>() {
+        },true);
         return smsResponse;
     }
 }

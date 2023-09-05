@@ -1,7 +1,7 @@
 package io.github.silencelwy.smsapi.tool;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.TypeReference;
+import cn.hutool.core.lang.TypeReference;
+import cn.hutool.json.JSONUtil;
 import io.github.silencelwy.smsapi.client.AccessKeyUtils;
 import io.github.silencelwy.smsapi.client.SmsSendClient;
 import io.github.silencelwy.smsapi.client.SmsStringUtils;
@@ -9,8 +9,8 @@ import io.github.silencelwy.smsapi.request.ApiRequest;
 import io.github.silencelwy.smsapi.request.ApiResponse;
 import io.github.silencelwy.smsapi.vo.ArriveInfoResVo;
 import io.github.silencelwy.smsapi.vo.SmsResponse;
+import java.io.UnsupportedEncodingException;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class ArriveInfoTool {
     public static final String MESSAGE_ARRIVE_QRY = "sms/arriveRes/qry";
@@ -32,13 +32,19 @@ public class ArriveInfoTool {
         if (msgIdSet.size() > 600){
             return SmsResponse.error(40004,"单次查询任务量不超过600条");
         }
-        String msgIdStr = msgIdSet.stream().filter(taskId -> SmsStringUtils.isNumeric(taskId)).collect(Collectors.joining(","));
+        StringBuffer stringBuffer = new StringBuffer();
+        for (String taskId:msgIdSet){
+            stringBuffer.append(taskId+",");
+        }
+        String msgIdStr = stringBuffer.toString();
         if (SmsStringUtils.isBlank(msgIdStr)){
             return SmsResponse.error(40004,"请传入正确的任务id");
+        }else {
+            msgIdStr = msgIdStr.substring(0,msgIdStr.length()-1);
         }
-        Map<String, Object> bodyParams = new HashMap<>(1);
+        Map<String, String> bodyParams = new HashMap<>(1);
         bodyParams.put("msgId",msgIdStr);
-        Map<String, Object> headers = AccessKeyUtils.getHeaders(apiKey, accessKey, bodyParams);
+        Map<String, String> headers = AccessKeyUtils.getHeaders(apiKey, accessKey, bodyParams);
         ApiRequest request = new ApiRequest();
         request.setBodyParams(bodyParams);
         request.setHeaders(headers);
@@ -46,11 +52,17 @@ public class ArriveInfoTool {
         request.setUrl(url);
         ApiResponse post = SmsSendClient.post(request);
         int status = post.getStatus();
-        String body = new String(post.getBody());
+        String body = null;
+        try {
+            body = new String(post.getBody(),"utf-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
         if (status != 200) {
             return SmsResponse.error(status, "网络请求异常："+url+","+body);
         }
-        SmsResponse<List<ArriveInfoResVo>> smsResponse = JSON.parseObject(body, new TypeReference<SmsResponse<List<ArriveInfoResVo>>>(){});
+
+        SmsResponse<List<ArriveInfoResVo>> smsResponse = JSONUtil.toBean(body, new TypeReference<SmsResponse<List<ArriveInfoResVo>>>(){},true);
         return smsResponse;
 
     }
